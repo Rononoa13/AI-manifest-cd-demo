@@ -8,6 +8,7 @@ on:
     paths:
       - 'manifests/**.yaml'
       - 'tenant-specific-overrides/**/*.yaml'
+      - .github/workflows
 
 jobs:
   generate-and-deploy:
