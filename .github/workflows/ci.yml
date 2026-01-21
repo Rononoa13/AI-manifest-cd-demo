@@ -27,7 +27,7 @@ jobs:
           chmod +x generate-tenant-jobs
           chmod +x deploy
 
-      - name: Generate and Deploy
+      - name: Generate Tenant jobs and Deploy
         run: |
           ./generate-tenant-jobs
           ./deploy
