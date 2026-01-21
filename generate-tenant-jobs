@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# This script wil create simple pipeline configuration by iteration over manifest files.
+output_file="tenant-deployment-pipeline.yml"
+
+# Start with a fresth output file
+echo "# Generated Deployment Pipeline" > "$output_file"
+
+# Iterate over all manifest files
+for manifest_file in manifests/*.yaml; do
+    echo "$manifest_file"
+    tenant_name=$(basename "$manifest_file" .yaml)
+    
+    echo "Adding deployment job for tenant: $tenant_name"
+
+    if [[ "$tenant_name" == "default-manifest" ]]; then
+        continue
+    fi
+
+    echo "[INFO] Generating job for tenant: $tenant_name"
+
+    config_path="tenant-specific-overrides/$tenant_name/$tenant_name-config.yaml"
+    if [[ -f "$config_path" ]]; then
+        echo "[WARN] Config not found for $tenant_name at $config_path. Skipping..."
+        continue
+    fi
+
+    cat >> "$output_file" <<EOF
+
+# Depoyment Job for $tenant_name
+deploy-${tenant_name}:
+    stage: deploy
+    script:
+        - ./deploy
+    variables:
+        INPUT_MANIFEST: "manifests/default-manifest.yaml"
+EOF
+    echo "[INFO] Job for $tenant_name added successfully."
+done

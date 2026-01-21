@@ -1,0 +1,59 @@
+#!/bin/bash
+set -euo pipefail
+
+#Initialize necessary directories and variables
+function init_vars() {
+    mkdir -p deployment-configs
+}
+
+function generate_deployment_yaml() {
+    local tenant="${1:-default-tenant}"
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    local deployment_file="deployment-configs/${tenant}-deployment.txt"
+
+    echo "Generating deployment YAML for tenant: $tenant"
+
+    #
+    echo "Deployment File for ${tenant}" > "${deployment_file}"
+    echo "Timestamp: ${timestamp}" >> "${deployment_file}"
+    echo "Status: CONFIG_GENERATED" >> "${deployment_file}"
+
+    echo "[INFO] Deployment file generated at ${deployment_file}"
+
+    # Create simple JSON summary
+    local summary_file="deployment-configs/${tenant}-summary.json"
+    cat > "${summary_file}" <<EOF
+{
+    "tenant": "${tenant}",
+    "deployment_file": "${deployment_file}",
+    "timestamp": "${timestamp}",
+    "status": "CONFIG_GENERATED"
+}
+EOF
+
+    echo "[INFO] Summary file generated at ${summary_file}"
+}
+
+# Display deployment information
+function display_deployment_info() {
+    echo ""
+    echo "Deployment configuration generation completed."
+    echo "Generated files"
+    echo "- deployment-configs/${tenant}-deployment.txt"
+    echo "- deployment-configs/${tenant}-summary.json"
+    echo ""
+}
+
+# Main execution flow
+function main() {
+    init_vars
+    echo "[INFO] Starting deployment configuration generation..."
+
+    generate_deployment_files "sample-tenant"
+
+    display_deployment_info
+
+    exit 0
+}
+
+main

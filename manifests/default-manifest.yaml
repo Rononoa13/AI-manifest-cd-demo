@@ -1,0 +1,4 @@
+# Default manifest settings
+variables:
+  ENVIRONMENT: "production"
+  DEFAULT_SETTING: "true"
