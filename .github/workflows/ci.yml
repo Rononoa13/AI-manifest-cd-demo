@@ -22,5 +22,5 @@ jobs:
 
       - name: Generate and Deploy
         run: |
-          ./generate-and-deploy
+          ./generate-tenant-jobs
           ./deploy
