@@ -1,0 +1,26 @@
+name: Minimal Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - qa
+    paths:
+      - 'manifests/**.yaml'
+      - 'tenant-specific-overrides/**/*.yaml'
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Make scripts executable
+        run: chmod +x ./
+
+      - name: Generate and Deploy
+        run: |
+          ./generate-and-deploy
+          ./deploy
