@@ -6,6 +6,28 @@ output_file="tenant-deployment-pipeline.yml"
 # Start with a fresth output file
 echo "# Generated Deployment Pipeline" > "$output_file"
 
+detect_config_changes() {
+    local changed_file=$(git diff-tree --name-only --no-commit-id -r $CI_COMMIT_SHA)
+    if echo "$changed_file" | grep -q '^tenant-specific-overrides/'; then
+        local tenants=$(echo "changed_files" | grep '^tenant-specific-overrides/' | cut -d'/' -f2 | sort -u | tr '\n' ',')
+        tenants=${tenants%,}  # Remove trailing comma
+        echo "[INFO] Detected changes in tenant-specific overrides for tenants: $tenants" >&2
+        echo "$tenants"
+        return 0
+    else
+        return 1
+    fi
+}
+
+if [[ "${CI_COMMIT_REF_NAME}" == "main" ]]; then
+    if affected_tenants=$(detect_config_changes); then
+        echo "[INFO] Generating jobs only for affected tenants: ${affected_tenants}" >&2
+    else
+        echo "[INFO] No changes detected in tenant-specific overrides. Exiting job generation." >&2
+        exit 0
+    fi
+fi
+
 # Iterate over all manifest files
 for manifest_file in manifests/*.yaml; do
     echo "$manifest_file"
