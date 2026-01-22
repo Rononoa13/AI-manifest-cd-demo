@@ -36,6 +36,7 @@ EOF
 
 # Display deployment information
 function display_deployment_info() {
+    local tenant="${1:-default-tenant}"
     echo ""
     echo "Deployment configuration generation completed."
     echo "Generated files"
