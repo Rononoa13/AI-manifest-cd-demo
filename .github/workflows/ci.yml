@@ -9,6 +9,8 @@ on:
       - 'manifests/**.yaml'
       - 'tenant-specific-overrides/**/*.yaml'
       - .github/workflows/*.yml
+      - 'deploy'
+      - 'generate-tenant-jobs'
 
 jobs:
   generate-and-deploy:
