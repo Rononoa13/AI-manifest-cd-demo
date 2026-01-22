@@ -30,10 +30,11 @@ jobs:
           chmod +x generate-tenant-jobs
           chmod +x deploy
 
-      - name: Generate Tenant jobs and Deploy
-        run: |
-          ./generate-tenant-jobs
-          ./deploy
+      - name: Generate Tenant Jobs
+        run: ./generate-tenant-jobs
+
+      - name: Deploy
+        run: ./deploy
       
       - name: Show generated files
         run: |
