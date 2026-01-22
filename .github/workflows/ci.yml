@@ -1,0 +1,43 @@
+name: Minimal Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - qa
+    paths:
+      - 'manifests/**.yaml'
+      - 'tenant-specific-overrides/**/*.yaml'
+      - .github/workflows/*.yml
+      - 'deploy'
+      - 'generate-tenant-jobs'
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Debug workspace
+        run: |
+          pwd
+          ls -la
+          
+      - name: Make scripts executable
+        run: |
+          chmod +x generate-tenant-jobs
+          chmod +x deploy
+
+      - name: Generate Tenant jobs and Deploy
+        run: |
+          ./generate-tenant-jobs
+          ./deploy
+      
+      - name: Show generated files
+        run: |
+          ls -R deployment-configs
+          cat deployment-configs/*.txt
+          echo "---- JSON File ----"
+          cat deployment-configs/*.json
