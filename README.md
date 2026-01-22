@@ -134,3 +134,13 @@ MIT License. See LICENSE file for details.
 - This is a demo; extend scripts for real K8s deployments (e.g., integrate `kubectl`).
 - For production, add security, testing, and rollback logic.
 - Inspired by multi-tenant K8s patterns; "AI" refers to intelligent automation.
+
+### Kubernetes Context
+This repo's structure and concepts draw from Kubernetes best practices:
+- **Official Docs**: [Manifests](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/) and [Multi-Tenancy](https://kubernetes.io/docs/concepts/security/multi-tenancy/) describe manifests as YAML for resources and multi-tenant isolation via namespaces.
+- **Tools Patterns**:
+  - [Kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/): Base + overlays (mirroring `manifests/` + `tenant-specific-overrides/`).
+  - [Helm](https://helm.sh/docs/chart_template_guide/): Charts with values overrides for customization.
+- **GitOps Examples**: Repos with manifest directories and CI for deployments (e.g., ArgoCD).
+- **Community Repos**: GitHub searches for "kubernetes manifests multi-tenant" show similar structures (e.g., [Kubernetes Examples](https://github.com/kubernetes/examples)).
+- **General Knowledge**: From production K8s usage—manifests are YAML, CD uses pipelines, multi-tenancy employs overrides.

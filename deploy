@@ -12,8 +12,7 @@ function generate_deployment_files() {
     local deployment_file="deployment-configs/${tenant}-deployment.txt"
 
     echo "Generating deployment YAML for tenant: $tenant"
-
-    #
+    echo "Using input manifest: $INPUT_MANIFEST"
     echo "Deployment File for ${tenant}" > "${deployment_file}"
     echo "Timestamp: ${timestamp}" >> "${deployment_file}"
     echo "Status: CONFIG_GENERATED" >> "${deployment_file}"
@@ -68,9 +67,11 @@ function main() {
         local env_var=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "ENVIRONMENT:" | cut -d'"' -f2)
         local tenant_id=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "TENANT_ID:" | cut -d'"' -f2)
         local custom_setting=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "CUSTOM_SETTING:" | cut -d'"' -f2)
+        local input_manifest=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "INPUT_MANIFEST:" | cut -d'"' -f2)
+        echo "[INFO] Variables for $tenant: ENV=$env_var, ID=$tenant_id, SETTING=$custom_setting, MANIFEST=$input_manifest"
 
         # Set variables and generate
-        TENANT_NAME="$tenant" ENVIRONMENT="$env_var" TENANT_ID="$tenant_id" CUSTOM_SETTING="$custom_setting" generate_deployment_files "$tenant"
+        INPUT_MANIFEST="$input_manifest" TENANT_NAME="$tenant" ENVIRONMENT="$env_var" TENANT_ID="$tenant_id" CUSTOM_SETTING="$custom_setting" generate_deployment_files "$tenant"
         display_deployment_info "$tenant"
     done
 

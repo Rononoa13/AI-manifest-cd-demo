@@ -33,6 +33,9 @@ jobs:
       - name: Generate Tenant Jobs
         run: ./generate-tenant-jobs
 
+      - name: Show Generated Pipeline
+        run: cat tenant-deployment-pipeline.yml
+
       - name: Deploy
         run: ./deploy
       

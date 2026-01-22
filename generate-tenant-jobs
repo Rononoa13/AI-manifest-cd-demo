@@ -61,7 +61,7 @@ deploy-${tenant_name}:
     script:
         - ./deploy
     variables:
-        INPUT_MANIFEST: "manifests/default-manifest.yaml"
+        INPUT_MANIFEST: "manifests/${tenant_name}.yaml"
         TENANT_NAME: "$tenant_name"
         ENVIRONMENT: "$env_var"
         TENANT_ID: "$tenant_id"
