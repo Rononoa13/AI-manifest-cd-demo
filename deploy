@@ -50,9 +50,10 @@ function main() {
     init_vars
     echo "[INFO] Starting deployment configuration generation..."
 
-    generate_deployment_files "sample-tenant"
+    local tenant="${TENANT_NAME:-sample-tenant}"
+    generate_deployment_files "$tenant"
 
-    display_deployment_info
+    display_deployment_info "$tenant"
 
     exit 0
 }
