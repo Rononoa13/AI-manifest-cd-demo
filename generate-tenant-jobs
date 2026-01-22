@@ -27,23 +27,12 @@ if [[ "${GITHUB_REF_NAME}" == "main" || "${GITHUB_REF_NAME}" == "qa" ]]; then
     fi
 fi
 
-# Iterate over all manifest files
-for manifest_file in manifests/*.yaml; do
-    echo "$manifest_file"
-    tenant_name=$(basename "$manifest_file" .yaml)
-    
-    echo "Adding deployment job for tenant: $tenant_name"
-
-    if [[ "$tenant_name" == "default-manifest" ]]; then
-        echo "[INFO] Skipped $tenant_name manifest file."
-        continue
-    fi
-
-    echo "[INFO] Generating job for tenant: $tenant_name"
+for tenant_name in $affected_tenants; do
+    echo "Adding deployment job for tenant: $tenant_name" >&2
 
     config_path="tenant-specific-overrides/$tenant_name/$tenant_name-config.yaml"
     if [[ ! -f "$config_path" ]]; then
-        echo "[WARN] Config not found for $tenant_name at $config_path. Skipping..."
+        echo "[WARN] Config not found for $tenant_name at $config_path. Skipping..." >&2
         continue
     fi
 
@@ -68,3 +57,48 @@ deploy-${tenant_name}:
 EOF
     echo "[INFO] Job for $tenant_name added successfully."
 done
+
+
+
+
+# Iterate over all manifest files
+# for manifest_file in manifests/*.yaml; do
+#     echo "$manifest_file"
+#     tenant_name=$(basename "$manifest_file" .yaml)
+    
+#     echo "Adding deployment job for tenant: $tenant_name"
+
+#     if [[ "$tenant_name" == "default-manifest" ]]; then
+#         echo "[INFO] Skipped $tenant_name manifest file."
+#         continue
+#     fi
+
+#     echo "[INFO] Generating job for tenant: $tenant_name"
+
+#     config_path="tenant-specific-overrides/$tenant_name/$tenant_name-config.yaml"
+#     if [[ ! -f "$config_path" ]]; then
+#         echo "[WARN] Config not found for $tenant_name at $config_path. Skipping..."
+#         continue
+#     fi
+
+#     # Extract variables from config (simple grep for demo)
+#     env_var=$(grep "ENVIRONMENT:" "$config_path" | cut -d':' -f2 | tr -d ' ' | sed 's/"//g')
+#     tenant_id=$(grep "TENANT_ID:" "$config_path" | cut -d':' -f2 | tr -d ' ' | sed 's/"//g')
+#     custom_setting=$(grep "CUSTOM_SETTING:" "$config_path" | cut -d':' -f2 | tr -d ' ' | sed 's/"//g')
+
+#     cat >> "$output_file" <<EOF
+
+# # Deployment Job for $tenant_name
+# deploy-${tenant_name}:
+#     stage: deploy
+#     script:
+#         - ./deploy
+#     variables:
+#         INPUT_MANIFEST: "manifests/${tenant_name}.yaml"
+#         TENANT_NAME: "$tenant_name"
+#         ENVIRONMENT: "$env_var"
+#         TENANT_ID: "$tenant_id"
+#         CUSTOM_SETTING: "$custom_setting"
+# EOF
+#     echo "[INFO] Job for $tenant_name added successfully."
+# done
