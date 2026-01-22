@@ -1,0 +1,16 @@
+stages:
+  - generate
+  - deploy
+
+generate-pipeline:
+  stage: generate
+  script:
+    - chmod +x generate-tenant-jobs
+    - ./generate-tenant-jobs
+  artifacts:
+    paths:
+      - tenant-deployment-pipeline.yml
+    expire_in: 1 hour
+
+include:
+  - tenant-deployment-pipeline.yml

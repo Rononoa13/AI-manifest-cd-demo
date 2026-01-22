@@ -41,7 +41,10 @@ jobs:
       
       - name: Show generated files
         run: |
-          ls -R deployment-configs
-          cat deployment-configs/*.txt
-          echo "---- JSON File ----"
-          cat deployment-configs/*.json
+          ls -R deployment-configs || echo "No deployment-configs directory"
+          for file in deployment-configs/*.txt; do
+            if [[ -f "$file" ]]; then
+              echo "---- $file ----"
+              cat "$file"
+            fi
+          done
