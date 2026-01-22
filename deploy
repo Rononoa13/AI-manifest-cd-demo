@@ -50,10 +50,29 @@ function main() {
     init_vars
     echo "[INFO] Starting deployment configuration generation..."
 
-    local tenant="${TENANT_NAME:-sample-tenant}"
-    generate_deployment_files "$tenant"
+    local pipeline_file="tenant-deployment-pipeline.yml"
+    if [[ ! -f "$pipeline_file" ]]; then
+        echo "[WARN] Pipeline file not found. Using default tenant."
+        local tenant="${TENANT_NAME:-sample-tenant}"
+        generate_deployment_files "$tenant"
+        display_deployment_info "$tenant"
+        exit 0
+    fi
 
-    display_deployment_info "$tenant"
+    # Parse pipeline and deploy for each tenant
+    local tenants=$(grep "^deploy-" "$pipeline_file" | sed 's/deploy-//' | sed 's/:$//')
+    for tenant in $tenants; do
+        echo "[INFO] Deploying for tenant: $tenant"
+
+        # Extract variables for this tenant
+        local env_var=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "ENVIRONMENT:" | cut -d'"' -f2)
+        local tenant_id=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "TENANT_ID:" | cut -d'"' -f2)
+        local custom_setting=$(grep -A 10 "deploy-$tenant:" "$pipeline_file" | grep "CUSTOM_SETTING:" | cut -d'"' -f2)
+
+        # Set variables and generate
+        TENANT_NAME="$tenant" ENVIRONMENT="$env_var" TENANT_ID="$tenant_id" CUSTOM_SETTING="$custom_setting" generate_deployment_files "$tenant"
+        display_deployment_info "$tenant"
+    done
 
     exit 0
 }
