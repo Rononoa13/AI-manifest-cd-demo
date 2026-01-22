@@ -7,7 +7,7 @@ output_file="tenant-deployment-pipeline.yml"
 echo "# Generated Deployment Pipeline" > "$output_file"
 
 detect_config_changes() {
-    local changed_file=$(git diff-tree --name-only --no-commit-id -r $GITHUB_SHA)
+    local changed_file=$(git diff-tree --name-only --no-commit-id -r -m $GITHUB_SHA)
     if echo "$changed_file" | grep -q '^tenant-specific-overrides/'; then
         local tenants=$(echo "$changed_file" | grep '^tenant-specific-overrides/' | cut -d'/' -f2 | sort -u | tr '\n' ',')
         tenants=${tenants%,}  # Remove trailing comma
