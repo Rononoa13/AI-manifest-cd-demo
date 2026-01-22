@@ -19,12 +19,11 @@ detect_config_changes() {
     fi
 }
 
-if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+if [[ "${GITHUB_REF_NAME}" == "main" || "${GITHUB_REF_NAME}" == "qa" ]]; then
     if affected_tenants=$(detect_config_changes); then
         echo "[INFO] Generating jobs only for affected tenants: ${affected_tenants}" >&2
     else
         echo "[INFO] No changes detected in tenant-specific overrides. Exiting job generation." >&2
-        exit 0
     fi
 fi
 
