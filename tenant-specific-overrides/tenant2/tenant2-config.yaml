@@ -3,4 +3,3 @@ variables:
   ENVIRONMENT: "production"
   TENANT_ID: "tenant2"
   CUSTOM_SETTING: "disabled"
-  
