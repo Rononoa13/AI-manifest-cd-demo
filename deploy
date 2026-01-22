@@ -6,7 +6,7 @@ function init_vars() {
     mkdir -p deployment-configs
 }
 
-function generate_deployment_yaml() {
+function generate_deployment_files() {
     local tenant="${1:-default-tenant}"
     local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     local deployment_file="deployment-configs/${tenant}-deployment.txt"
