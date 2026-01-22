@@ -4,4 +4,3 @@ variables:
   TENANT_ID: "tenant1"
   CUSTOM_SETTING: "enabled"
   
-  
