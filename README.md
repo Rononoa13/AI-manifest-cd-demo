@@ -1,6 +1,6 @@
-# AI-MANIFEST-CD-DEMO
+# MANIFEST-CD-DEMO
 
-A demonstration repository showcasing an AI-assisted approach to continuous deployment (CD) of Kubernetes manifests in a multi-tenant environment. This project automates the generation of deployment pipelines and configurations for isolated tenants, optimizing deployments based on configuration changes.
+A demonstration repository showcasing an minimalistic approach to continuous deployment (CD) of Kubernetes manifests in a multi-tenant environment. This project automates the generation of deployment pipelines and configurations for isolated tenants, optimizing deployments based on configuration changes.
 
 ## Features
 
