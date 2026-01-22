@@ -39,3 +39,5 @@ jobs:
         run: |
           ls -R deployment-configs
           cat deployment-configs/*.txt
+          echo "---- JSON File ----"
+          cat deployment-configs/*.json
