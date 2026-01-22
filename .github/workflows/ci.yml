@@ -34,3 +34,8 @@ jobs:
         run: |
           ./generate-tenant-jobs
           ./deploy
+      
+      - name: Show generated files
+        run: |
+          ls -R deployment-configs
+          cat deployment-configs/*.txt
